@@ -4,31 +4,22 @@ import {
   Divider,
   Flex,
   HStack,
+  Spinner,
   Stack,
   Text,
   useRadioGroup,
 } from '@chakra-ui/react';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { debounce } from 'debounce';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { FiMoreHorizontal } from 'react-icons/fi';
 import { MdOutlineRouter } from 'react-icons/md';
 import ReactInputMask from 'react-input-mask';
 import * as yup from 'yup';
 
+import { getAddressByZipCode } from '../../../services/api';
 import { Input, Select } from '../../Form';
 import RadioCard from '../../RadioCard';
 import { TabPanelFooter } from '../TabPanel/TabPanelFooter';
-
-const options = [
-  { value: 'Provedores de internet', icon: MdOutlineRouter },
-  { value: 'Outros segmentos', icon: FiMoreHorizontal },
-];
-
-const companiesType = [
-  'Simples Nacional',
-  'Sociedade Anônima',
-  'Sociedade Simples',
-];
 
 type Step2Data = {
   companyType: string;
@@ -55,28 +46,58 @@ const formSchema = yup
   })
   .required();
 
+const options = [
+  { value: 'Provedores de internet', icon: MdOutlineRouter },
+  { value: 'Outros segmentos', icon: FiMoreHorizontal },
+];
+
+const companiesType = [
+  'Simples Nacional',
+  'Sociedade Anônima',
+  'Sociedade Simples',
+];
+
 export function Step2() {
   const {
     register,
+    setValue,
     handleSubmit,
     formState: { isSubmitting, errors },
-  } = useForm<Step2Data>({ resolver: yupResolver(formSchema) });
+  } = useForm<Step2Data>({
+    /* resolver: yupResolver(formSchema) */
+  });
   const [companySegment, setCompanySegment] = useState<string>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'companySegment',
-    defaultValue: 0,
     onChange: (value) => setCompanySegment(value),
   });
   const group = getRootProps();
 
   const handleStep2Submit: SubmitHandler<Step2Data> = (data) => {
     const formData = {
-      ...data,
       companySegment,
+      ...data,
     };
     console.log(formData);
   };
+
+  const handleZipCodeChange = debounce(async (zipCode: string) => {
+    if (zipCode.includes('_')) return null;
+    setIsLoading(true);
+    try {
+      const { complemento, bairro, logradouro } = await getAddressByZipCode(
+        zipCode,
+      );
+      setValue('complement', complemento);
+      setValue('district', bairro);
+      setValue('address', logradouro);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+    }
+  }, 500);
 
   return (
     <Stack spacing={10}>
@@ -137,14 +158,17 @@ export function Step2() {
               w={['50%']}
             />
           </HStack>
-          <Input
-            as={ReactInputMask}
-            mask="99999-999"
-            error={errors.zipCode}
-            label="CEP"
-            {...register('zipCode')}
-            w={['15%']}
-          />
+          <HStack spacing={3}>
+            <Input
+              as={ReactInputMask}
+              mask="99999-999"
+              error={errors.zipCode}
+              label="CEP"
+              onChange={(e) => handleZipCodeChange(e.target.value)}
+              w={['15%']}
+            />
+            {isLoading && <Spinner size="sm" />}
+          </HStack>
           <Input
             error={errors.address}
             label="Endereço"

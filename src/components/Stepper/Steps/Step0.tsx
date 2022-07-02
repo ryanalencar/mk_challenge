@@ -123,7 +123,7 @@ export function Step0() {
             </span>
           </Text>
         </HStack>
-        <TabPanelFooter footerButtonText="Continuar" />
+        <TabPanelFooter hasBackButton={false} footerButtonText="Continuar" />
       </Flex>
     </Stack>
   );
