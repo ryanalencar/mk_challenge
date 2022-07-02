@@ -1,11 +1,15 @@
-import { Image, Text } from '@chakra-ui/react';
-import type { NextPage } from 'next';
+import { Center } from '@chakra-ui/react';
 
-const Home: NextPage = () => (
-  <>
-    <Image src="/images/logo.svg" />
-    <Text>Teste</Text>
-  </>
-);
+import Header from '../components/Header';
+import { Stepper } from '../components/Stepper';
 
-export default Home;
+export default function Home() {
+  return (
+    <>
+      <Header />
+      <Center mt={5}>
+        <Stepper />
+      </Center>
+    </>
+  );
+}

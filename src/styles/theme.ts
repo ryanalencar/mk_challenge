@@ -1,6 +1,14 @@
 import { extendTheme } from '@chakra-ui/react';
 
 export const theme = extendTheme({
+  styles: {
+    global: {
+      body: {
+        background: 'bg',
+        fontFamily: "'Baloo 2', sans-serif",
+      },
+    },
+  },
   components: {
     Text: {
       defaultProps: {
@@ -41,6 +49,7 @@ export const theme = extendTheme({
       heading: '#205266',
     },
     green: '#63D391',
+    bg: '#F0F4F5',
   },
   fonts: {
     heading: "'Baloo 2', sans-serif",
