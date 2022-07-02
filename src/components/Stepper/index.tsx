@@ -24,7 +24,8 @@ export function Stepper() {
       index={tabIndex}
       size="md"
       w="65%"
-      variant="solid-rounded">
+      variant="solid-rounded"
+      mb={5}>
       <TabList bgColor="white" borderRadius={25}>
         {tabList.map(({ title }, index) => (
           <Tab

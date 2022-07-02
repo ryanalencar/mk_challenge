@@ -9,6 +9,7 @@ import {
   Text,
   useRadioGroup,
 } from '@chakra-ui/react';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { debounce } from 'debounce';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { FiMoreHorizontal } from 'react-icons/fi';
@@ -64,7 +65,7 @@ export function Step2() {
     handleSubmit,
     formState: { isSubmitting, errors },
   } = useForm<Step2Data>({
-    /* resolver: yupResolver(formSchema) */
+    resolver: yupResolver(formSchema),
   });
   const [companySegment, setCompanySegment] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);

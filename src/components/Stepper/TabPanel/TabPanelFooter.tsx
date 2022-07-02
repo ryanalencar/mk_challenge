@@ -2,6 +2,8 @@ import React from 'react';
 
 import { Button, ButtonGroup, Divider, VStack } from '@chakra-ui/react';
 
+import { useTab } from '../../../hooks/useTab';
+
 interface ITabPanelFooterProps {
   footerButtonText: string;
   hasBackButton?: boolean;
@@ -11,6 +13,7 @@ export function TabPanelFooter({
   footerButtonText,
   hasBackButton = true,
 }: ITabPanelFooterProps) {
+  const { moveBack } = useTab();
   return (
     <VStack as="footer" mt={8} spacing={5} align="flex-start">
       <Divider borderRadius={2} />
@@ -30,7 +33,8 @@ export function TabPanelFooter({
             variant="link"
             color="blue.heading"
             fontWeight="regular"
-            textDecoration="underline">
+            textDecoration="underline"
+            onClick={moveBack}>
             Voltar
           </Button>
         )}
