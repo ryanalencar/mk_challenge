@@ -3,7 +3,7 @@ import React from 'react';
 import { Flex, Stack, Text } from '@chakra-ui/react';
 import ReactInputMask from 'react-input-mask';
 
-import { Input } from '../../Input';
+import { Input } from '../../Form';
 import { TabPanelFooter } from '../TabPanel/TabPanelFooter';
 
 export function Step1() {
