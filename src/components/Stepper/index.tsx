@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { HStack, Tab, TabList, Tabs, Text } from '@chakra-ui/react';
 
+import { useTab } from '../../hooks/useTab';
 import { Steps } from './Steps';
 
 const tabList = [
@@ -13,15 +14,14 @@ const tabList = [
 ];
 
 export function Stepper() {
-  const [selectedIndex, setselectedIndex] = useState(0);
-
+  const { tabIndex, handleTabsChange } = useTab();
   return (
     <Tabs
-      onChange={(index) => setselectedIndex(index)}
       isLazy
       isFitted
       isManual
-      index={selectedIndex}
+      onChange={handleTabsChange}
+      index={tabIndex}
       size="md"
       w="65%"
       variant="solid-rounded">
@@ -29,8 +29,8 @@ export function Stepper() {
         {tabList.map(({ title }, index) => (
           <Tab
             key={title}
-            bgColor={selectedIndex > index ? 'green' : 'white'}
-            color={selectedIndex > index ? 'white' : 'blue.heading'}
+            bgColor={tabIndex > index ? 'green' : 'white'}
+            color={tabIndex > index ? 'white' : 'blue.heading'}
             _selected={{ color: 'white', bg: 'blue.bg' }}
             sx={{
               _notLast: { borderRightRadius: 0 },
@@ -40,9 +40,9 @@ export function Stepper() {
               <Text
                 size="xsm"
                 color={
-                  selectedIndex > index
+                  tabIndex > index
                     ? 'white'
-                    : selectedIndex === index
+                    : tabIndex === index
                     ? 'white'
                     : 'green'
                 }>
