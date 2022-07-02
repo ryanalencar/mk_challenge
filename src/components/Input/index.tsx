@@ -35,11 +35,17 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
       bg="white"
       borderColor="gray.200"
       _hover={{ background: 'white' }}
-      _focus={{ borderColor: 'green' }}
+      _focus={{ borderColor: error ? 'red.500' : 'green' }}
       ref={ref}
       {...rest}
     />
-    {!!error && <FormErrorMessage>{error?.message}</FormErrorMessage>}
+    {!!error && (
+      <FormErrorMessage>
+        <Text variant="bold" size="xsm">
+          {error?.message}
+        </Text>
+      </FormErrorMessage>
+    )}
   </FormControl>
 );
 

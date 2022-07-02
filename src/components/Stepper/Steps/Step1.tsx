@@ -12,7 +12,6 @@ import {
 import { css } from '@emotion/css';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import InputMask from 'react-input-mask';
 import * as yup from 'yup';
 
 import { Input } from '../../Input';
@@ -35,7 +34,7 @@ const formSchema = yup
   })
   .required();
 
-export function Step0() {
+export function Step1() {
   const {
     register,
     handleSubmit,
@@ -47,25 +46,22 @@ export function Step0() {
   const handleStep0Submit: SubmitHandler<Step0Data> = (data) => {
     const formData = {
       ...data,
-      phone: data.phone
-        .replace(' ', '')
-        .replace('(', '')
-        .replace(')', '')
-        .replace('-', ''),
       useContractRead,
     };
     console.log(formData);
   };
 
+  console.log(errors);
+
   return (
     <Stack spacing={5}>
       <Stack spacing={3}>
         <Text size="sm" color="green">
-          Vamos começar pela conta de usuário
+          Validação enviada para seu celular
         </Text>
         <Text size="xsm" variant="regular">
-          Preencha seu email que utiliza profissionalmente,
-          <br /> nome completo de pessoa Física e seu número do celular.
+          Enviamos uma mensagem SMS com o código de confirmação
+          <br /> para o celular abaixo:
         </Text>
       </Stack>
       <Flex
@@ -82,8 +78,6 @@ export function Step0() {
           <HStack spacing={5}>
             <Input error={errors.name} label="Nome" {...register('name')} />
             <Input
-              as={InputMask}
-              mask="(**) *****-****"
               error={errors.phone}
               label="Celular"
               {...register('phone')}
