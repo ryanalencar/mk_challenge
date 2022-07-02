@@ -83,7 +83,7 @@ export function Step0() {
             <Input error={errors.name} label="Nome" {...register('name')} />
             <Input
               as={InputMask}
-              mask="(**) *****-****"
+              mask="(99) 99999-9999"
               error={errors.phone}
               label="Celular"
               {...register('phone')}
