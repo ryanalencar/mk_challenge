@@ -31,7 +31,11 @@ export function Stepper() {
             key={title}
             bgColor={selectedIndex > index ? 'green' : 'white'}
             color={selectedIndex > index ? 'white' : 'blue.heading'}
-            _selected={{ color: 'white', bg: 'blue.bg' }}>
+            _selected={{ color: 'white', bg: 'blue.bg' }}
+            sx={{
+              _notLast: { borderRightRadius: 0 },
+              _notFirst: { borderLeftRadius: 0 },
+            }}>
             <HStack spacing={2}>
               <Text
                 size="xsm"
