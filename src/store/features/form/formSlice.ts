@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import type { RootState } from '../..';
-import { CompanyState, FormState, UserState } from './types';
+import { CompanyState, DocsState, FormState, UserState } from './types';
 
 const initialState: FormState = {
   company: {
@@ -46,9 +46,13 @@ const counterSlice = createSlice({
     createCompany: (state, action: PayloadAction<CompanyState>) => {
       state.company = action.payload;
     },
+    uploadDocs: (state, action: PayloadAction<DocsState>) => {
+      state.docs = action.payload;
+    },
   },
 });
-export const { createUser, updateUser, createCompany } = counterSlice.actions;
+export const { createUser, updateUser, createCompany, uploadDocs } =
+  counterSlice.actions;
 
 export const selectForm = (state: RootState) => state.formReducer;
 

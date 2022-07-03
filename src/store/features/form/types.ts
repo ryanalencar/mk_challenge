@@ -19,7 +19,10 @@ export type CompanyState = {
   zipCode: string;
 };
 
+export type DocsState = FileList[];
+
 export type FormState = {
   user: UserState;
   company: CompanyState;
+  docs: DocsState;
 };
