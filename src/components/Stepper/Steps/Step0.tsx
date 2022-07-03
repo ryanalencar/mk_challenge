@@ -2,6 +2,7 @@ import React from 'react';
 
 import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import {
+  Button,
   Flex,
   HStack,
   IconButton,
@@ -9,7 +10,6 @@ import {
   Text,
   useBoolean,
 } from '@chakra-ui/react';
-import { css } from '@emotion/css';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import InputMask from 'react-input-mask';
@@ -39,8 +39,10 @@ export function Step0() {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting, errors },
-  } = useForm<Step0Data>({ resolver: yupResolver(formSchema) });
+    formState: { errors, isDirty, isSubmitting, isValidating },
+  } = useForm<Step0Data>({
+    resolver: yupResolver(formSchema),
+  });
 
   const [useContractRead, setUseContractRead] = useBoolean();
 
@@ -82,6 +84,7 @@ export function Step0() {
           <HStack spacing={5}>
             <Input error={errors.name} label="Nome" {...register('name')} />
             <Input
+              type="tel"
               as={InputMask}
               mask="(99) 99999-9999"
               error={errors.phone}
@@ -110,20 +113,22 @@ export function Step0() {
           />
           <Text size="xsm" color="blue.heading">
             Eu li e concordo com o{' '}
-            <span
-              className={css`
-                text-decoration: underline;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                &:hover {
-                  color: #63d391;
-                }
-              `}>
+            <Button
+              variant="link"
+              fontWeight="regular"
+              textDecoration="underline"
+              color="blue.heading"
+              size="xsm">
               Contrato de Uso
-            </span>
+            </Button>
           </Text>
         </HStack>
-        <TabPanelFooter hasBackButton={false} footerButtonText="Continuar" />
+        <TabPanelFooter
+          hasBackButton={false}
+          footerButtonText="Continuar"
+          footerButtonIsDisabled={!isDirty}
+          footerButtonIsLoading={isSubmitting || isValidating}
+        />
       </Flex>
     </Stack>
   );

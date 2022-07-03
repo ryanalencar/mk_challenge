@@ -63,7 +63,7 @@ export function Step2() {
     register,
     setValue,
     handleSubmit,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting, errors, isDirty, isValidating },
   } = useForm<Step2Data>({
     resolver: yupResolver(formSchema),
   });
@@ -137,6 +137,7 @@ export function Step2() {
             {...register('companyType')}
           />
           <Input
+            type="tel"
             as={ReactInputMask}
             mask="99.999.999/9999-99"
             error={errors.cnpj}
@@ -151,6 +152,7 @@ export function Step2() {
               {...register('corporateName')}
             />
             <Input
+              type="tel"
               as={ReactInputMask}
               mask="(99) 9999-9999"
               error={errors.phone}
@@ -161,6 +163,7 @@ export function Step2() {
           </HStack>
           <HStack spacing={3}>
             <Input
+              type="tel"
               as={ReactInputMask}
               mask="99999-999"
               error={errors.zipCode}
@@ -195,7 +198,11 @@ export function Step2() {
           </HStack>
         </Stack>
 
-        <TabPanelFooter footerButtonText="Confirmar" />
+        <TabPanelFooter
+          footerButtonIsDisabled={!isDirty}
+          footerButtonIsLoading={isSubmitting || isValidating || isLoading}
+          footerButtonText="Confirmar"
+        />
       </Flex>
     </Stack>
   );

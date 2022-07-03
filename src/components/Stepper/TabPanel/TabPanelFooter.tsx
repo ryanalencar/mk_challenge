@@ -6,10 +6,14 @@ import { useTab } from '../../../hooks/useTab';
 
 interface ITabPanelFooterProps {
   footerButtonText: string;
+  footerButtonIsLoading?: boolean;
+  footerButtonIsDisabled?: boolean;
   hasBackButton?: boolean;
 }
 
 export function TabPanelFooter({
+  footerButtonIsDisabled = false,
+  footerButtonIsLoading = false,
   footerButtonText,
   hasBackButton = true,
 }: ITabPanelFooterProps) {
@@ -20,6 +24,8 @@ export function TabPanelFooter({
 
       <ButtonGroup spacing={8}>
         <Button
+          isDisabled={footerButtonIsDisabled}
+          isLoading={footerButtonIsLoading}
           type="submit"
           bgColor="green"
           color="white"
