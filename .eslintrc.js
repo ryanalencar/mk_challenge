@@ -28,6 +28,7 @@ module.exports = {
     'unused-imports'
   ],
   rules: {
+    'react/require-default-props':'off',
     'no-case-declarations': 'off',
     'no-restricted-syntax': 'off',
     'linebreak-style': 'off',
