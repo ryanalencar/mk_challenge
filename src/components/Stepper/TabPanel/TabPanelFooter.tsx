@@ -9,6 +9,7 @@ interface ITabPanelFooterProps {
   footerButtonIsLoading?: boolean;
   footerButtonIsDisabled?: boolean;
   hasBackButton?: boolean;
+  footerButtonOnClick?: () => void;
 }
 
 export function TabPanelFooter({
@@ -16,6 +17,7 @@ export function TabPanelFooter({
   footerButtonIsLoading = false,
   footerButtonText,
   hasBackButton = true,
+  footerButtonOnClick,
 }: ITabPanelFooterProps) {
   const { moveBack } = useTab();
   return (
@@ -31,7 +33,8 @@ export function TabPanelFooter({
           color="white"
           px={8}
           _hover={{ opacity: 0.9 }}
-          _active={{ transform: 'scale(0.9)' }}>
+          _active={{ transform: 'scale(0.9)' }}
+          onClick={footerButtonOnClick}>
           {footerButtonText ?? ''}
         </Button>
         {hasBackButton && (

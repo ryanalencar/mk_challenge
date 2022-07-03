@@ -17,7 +17,9 @@ import { MdOutlineRouter } from 'react-icons/md';
 import ReactInputMask from 'react-input-mask';
 import * as yup from 'yup';
 
+import { useTab } from '../../../hooks/useTab';
 import { getAddressByZipCode } from '../../../services/api';
+import { useReducerCompany } from '../../../store/hooks/company';
 import { Input, Select } from '../../Form';
 import RadioCard from '../../RadioCard';
 import { TabPanelFooter } from '../TabPanel/TabPanelFooter';
@@ -38,9 +40,9 @@ const formSchema = yup
   .object({
     companyType: yup.string().required('O tipo de empresa é obrigatório'),
     cnpj: yup.string().required('CNPJ é obrigatório'),
+    zipCode: yup.string().required('CEP é obrigatório'),
     phone: yup.string().required('Número de telefone é obrigatório'),
     corporateName: yup.string().required('Razão social é obrigatório'),
-    zipCode: yup.string().required('CEP é obrigatório'),
     address: yup.string().required('Endereço é obrigatório'),
     addressNumber: yup.string().required('Número é obrigatório'),
     district: yup.string().required('Bairro é obrigatório'),
@@ -59,6 +61,7 @@ const companiesType = [
 ];
 
 export function Step2() {
+  const [companyState, { createCompany }] = useReducerCompany();
   const {
     register,
     setValue,
@@ -66,8 +69,10 @@ export function Step2() {
     formState: { isSubmitting, errors, isDirty, isValidating },
   } = useForm<Step2Data>({
     resolver: yupResolver(formSchema),
+    defaultValues: companyState,
   });
-  const [companySegment, setCompanySegment] = useState<string>();
+  const { moveForward } = useTab();
+  const [companySegment, setCompanySegment] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
 
   const { getRootProps, getRadioProps } = useRadioGroup({
@@ -77,11 +82,21 @@ export function Step2() {
   const group = getRootProps();
 
   const handleStep2Submit: SubmitHandler<Step2Data> = (data) => {
+    setIsLoading(true);
     const formData = {
-      companySegment,
       ...data,
+      phone: data.phone
+        .replace(' ', '')
+        .replace('(', '')
+        .replace(')', '')
+        .replace('-', ''),
+      zipCode: data.zipCode.replace('-', ''),
+      cnpj: data.cnpj.replaceAll('.', '').replace('/', '').replace('-', ''),
+      companySegment,
     };
-    console.log(formData);
+    createCompany(formData);
+    moveForward();
+    setIsLoading(false);
   };
 
   const handleZipCodeChange = debounce(async (zipCode: string) => {
@@ -91,6 +106,7 @@ export function Step2() {
       const { complemento, bairro, logradouro } = await getAddressByZipCode(
         zipCode,
       );
+      setValue('zipCode', zipCode);
       setValue('complement', complemento);
       setValue('district', bairro);
       setValue('address', logradouro);
@@ -163,11 +179,11 @@ export function Step2() {
           </HStack>
           <HStack spacing={3}>
             <Input
-              type="tel"
               as={ReactInputMask}
               mask="99999-999"
               error={errors.zipCode}
               label="CEP"
+              {...register('zipCode')}
               onChange={(e) => handleZipCodeChange(e.target.value)}
               w={['15%']}
             />
@@ -199,7 +215,7 @@ export function Step2() {
         </Stack>
 
         <TabPanelFooter
-          footerButtonIsDisabled={!isDirty}
+          footerButtonIsDisabled={!isDirty || companySegment.length < 1}
           footerButtonIsLoading={isSubmitting || isValidating || isLoading}
           footerButtonText="Confirmar"
         />

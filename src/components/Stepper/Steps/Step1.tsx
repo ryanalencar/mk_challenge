@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   Button,
+  createStandaloneToast,
   Flex,
   HStack,
   PinInput,
@@ -12,11 +13,36 @@ import {
 } from '@chakra-ui/react';
 import ReactInputMask from 'react-input-mask';
 
+import { useTab } from '../../../hooks/useTab';
+import { useReducerUser } from '../../../store/hooks/user';
 import { Input } from '../../Form';
 import { TabPanelFooter } from '../TabPanel/TabPanelFooter';
 
+const { toast: standaloneToast } = createStandaloneToast();
+
 export function Step1() {
+  const [userState, { updateUser }] = useReducerUser();
+  const { moveForward } = useTab();
   const toast = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleValidatePhone = () => {
+    setIsLoading(true);
+    updateUser({ phoneVerified: true });
+    if (standaloneToast.isActive('phone-verified-toast')) return null;
+    standaloneToast({
+      id: 'phone-verified-toast',
+      title: 'Número verificado com sucesso!',
+      description: 'Código aplicado com sucesso. Obrigado!',
+      status: 'success',
+      duration: 3000,
+      isClosable: true,
+    });
+    setTimeout(() => {
+      moveForward();
+      setIsLoading(false);
+    }, 1500);
+  };
 
   return (
     <Stack spacing={5}>
@@ -31,6 +57,7 @@ export function Step1() {
         <Input
           isReadOnly
           type="tel"
+          defaultValue={userState.phone}
           as={ReactInputMask}
           mask="(99) 99999-9999"
           label="Celular"
@@ -78,7 +105,11 @@ export function Step1() {
           </Button>
         </Flex>
       </Stack>
-      <TabPanelFooter footerButtonText="Confirmar" />
+      <TabPanelFooter
+        footerButtonText="Confirmar"
+        footerButtonOnClick={handleValidatePhone}
+        footerButtonIsLoading={isLoading}
+      />
     </Stack>
   );
 }

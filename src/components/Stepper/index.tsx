@@ -33,6 +33,7 @@ export function Stepper() {
             bgColor={tabIndex > index ? 'green' : 'white'}
             color={tabIndex > index ? 'white' : 'blue.heading'}
             _selected={{ color: 'white', bg: 'blue.bg' }}
+            isDisabled={tabIndex < index}
             sx={{
               _notLast: { borderRightRadius: 0 },
               _notFirst: { borderLeftRadius: 0 },

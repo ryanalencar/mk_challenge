@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import {
@@ -15,6 +15,8 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import InputMask from 'react-input-mask';
 import * as yup from 'yup';
 
+import { useTab } from '../../../hooks/useTab';
+import { useReducerUser } from '../../../store/hooks/user';
 import { Input } from '../../Form';
 import { TabPanelFooter } from '../TabPanel/TabPanelFooter';
 
@@ -36,17 +38,25 @@ const formSchema = yup
   .required();
 
 export function Step0() {
+  const [userState, { createUser }] = useReducerUser();
   const {
     register,
     handleSubmit,
     formState: { errors, isDirty, isSubmitting, isValidating },
   } = useForm<Step0Data>({
     resolver: yupResolver(formSchema),
+    defaultValues: {
+      email: userState.email ?? '',
+      name: userState.name ?? '',
+      phone: userState.phone ?? '',
+    },
   });
-
+  const [isLoading, setIsLoading] = useState(false);
   const [useContractRead, setUseContractRead] = useBoolean();
+  const { moveForward } = useTab();
 
   const handleStep0Submit: SubmitHandler<Step0Data> = (data) => {
+    setIsLoading(true);
     const formData = {
       ...data,
       phone: data.phone
@@ -56,7 +66,9 @@ export function Step0() {
         .replace('-', ''),
       useContractRead,
     };
-    console.log(formData);
+    createUser(formData);
+    moveForward();
+    setIsLoading(false);
   };
 
   return (
@@ -127,7 +139,7 @@ export function Step0() {
           hasBackButton={false}
           footerButtonText="Continuar"
           footerButtonIsDisabled={!isDirty}
-          footerButtonIsLoading={isSubmitting || isValidating}
+          footerButtonIsLoading={isSubmitting || isValidating || isLoading}
         />
       </Flex>
     </Stack>
