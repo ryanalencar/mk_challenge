@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
-import { Stack, Text, VStack } from '@chakra-ui/react';
+import { Button, Stack, Text, VStack } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 
 import { useTab } from '../../../hooks/useTab';
-import { uploadDocs } from '../../../store/features/form/formSlice';
+import { useReducerDocs } from '../../../store/hooks/docs';
 import { FileUpload } from '../../Form/FileUpload';
 import { UploadBox, UploadBoxOptions } from '../../Form/FileUpload/UploadBox';
 import { TabPanelFooter } from '../TabPanel/TabPanelFooter';
@@ -40,16 +40,24 @@ export function Step3() {
     mode: 'all',
     reValidateMode: 'onChange',
   });
-  const [docs, setDocs] = useState<FileList[]>([]);
+  const [docsState, { uploadDocs }] = useReducerDocs();
+  const [docs, setDocs] = useState<FileList[]>(docsState);
   const { moveForward } = useTab();
 
   const handleStep3Submit = handleSubmit((data) => {
-    if (docs.length === 3) uploadDocs(docs);
-    setDocs([...docs, data.file_]);
+    const file = data?.file_?.item(0);
+    const newFile = {
+      name: file?.name,
+      size: file?.size,
+      relativePath: file?.webkitRelativePath,
+    };
+    if (docs?.length === 3) return null;
+    setDocs([...docs, newFile]);
+    uploadDocs(docs);
   });
 
   useEffect(() => {
-    docs.map((file, index) => {
+    docs?.map((file, index) => {
       if (docs[index]) docOptions[index].sent = true;
       else docOptions[index].sent = false;
     });
@@ -67,6 +75,12 @@ export function Step3() {
       }
     }
     return true;
+  };
+
+  const handleSaveToContinueLater = () => {
+    if (docs.length === 3) moveForward();
+    uploadDocs(docs);
+    moveForward();
   };
 
   return (
@@ -99,10 +113,19 @@ export function Step3() {
         </form>
       </Stack>
       <TabPanelFooter
-        footerButtonIsDisabled={docs.length < 3}
+        footerButtonIsDisabled={docs?.length < 3 || false}
         footerButtonText="Continuar"
-        footerButtonOnClick={moveForward}
-      />
+        footerButtonOnClick={moveForward}>
+        <Button
+          variant="link"
+          textDecoration="underline"
+          _active={{ color: 'green' }}
+          size="xsm"
+          color="green"
+          onClick={handleSaveToContinueLater}>
+          Salvar para continuar depois
+        </Button>
+      </TabPanelFooter>
     </Stack>
   );
 }

@@ -10,7 +10,7 @@ interface Func {
 
 type UseReducerCompany = [DocsState, Func];
 
-export function useReducerCompany(): UseReducerCompany {
+export function useReducerDocs(): UseReducerCompany {
   const dispatch = useAppDispatch();
   const form = useAppSelector(selectForm);
 

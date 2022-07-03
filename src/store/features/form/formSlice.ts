@@ -23,6 +23,7 @@ const initialState: FormState = {
     useContractRead: false,
     phoneVerified: false,
   },
+  docs: [],
 };
 
 const counterSlice = createSlice({
