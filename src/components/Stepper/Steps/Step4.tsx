@@ -5,7 +5,7 @@ import { HStack, Image, Stack, Text, VStack } from '@chakra-ui/react';
 
 export default function Step4() {
   return (
-    <VStack spacing={5}>
+    <VStack spacing={5} textAlign={['center']}>
       <Image src="/images/account_success.png" alt="Conta criada com sucesso" />
       <Text color="green" size="sm">
         Sua conta foi cadastrada com sucesso!
@@ -20,7 +20,9 @@ export default function Step4() {
       </Stack>
       <HStack color="orange.300">
         <WarningIcon fontSize="larger" />
-        <Text size="sm">Foi enviado um email com os próximos passos</Text>
+        <Text size={['xsm', 'sm']}>
+          Foi enviado um email com os próximos passos
+        </Text>
       </HStack>
     </VStack>
   );

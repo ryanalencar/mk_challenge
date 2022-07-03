@@ -22,11 +22,12 @@ export function Stepper() {
       isManual
       onChange={handleTabsChange}
       index={tabIndex}
-      size="md"
-      w="65%"
+      size={['sm', 'md']}
+      w={['100%', '80%', '65%']}
       variant="solid-rounded"
-      mb={5}>
-      <TabList bgColor="white" borderRadius={25}>
+      mb={5}
+      orientation={['vertical', 'horizontal']}>
+      <TabList bgColor="white" borderRadius={25} overflowY="auto">
         {tabList.map(({ title }, index) => (
           <Tab
             key={title}

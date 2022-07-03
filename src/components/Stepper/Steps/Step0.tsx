@@ -9,6 +9,7 @@ import {
   Stack,
   Text,
   useBoolean,
+  useMediaQuery,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -43,7 +44,7 @@ export function Step0() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isDirty, isSubmitting, isValidating },
+    formState: { errors, isSubmitting, isValidating },
   } = useForm<Step0Data>({
     resolver: yupResolver(formSchema),
     defaultValues: {
@@ -57,6 +58,7 @@ export function Step0() {
     userState.useContractRead ?? false,
   );
   const { moveForward } = useTab();
+  const [isMobile] = useMediaQuery('(max-width: 600px)');
 
   const handleStep0Submit: SubmitHandler<Step0Data> = (data) => {
     setIsLoading(true);
@@ -95,21 +97,22 @@ export function Step0() {
         </Text>
         <Text size="xsm" variant="regular">
           Preencha seu email que utiliza profissionalmente,
-          <br /> nome completo de pessoa Física e seu número do celular.
+          {isMobile ? null : <br />} nome completo de pessoa Física e seu número
+          do celular.
         </Text>
       </Stack>
       <Flex
         as="form"
         direction="column"
         onSubmit={handleSubmit(handleStep0Submit)}>
-        <Stack spacing={5}>
+        <Stack spacing={2}>
           <Input
             error={errors.email}
             label="E-mail"
             {...register('email')}
-            w={['50%']}
+            w={['100%', '50%']}
           />
-          <HStack spacing={5}>
+          <Stack spacing={2} direction={['column', 'row']}>
             <Input error={errors.name} label="Nome" {...register('name')} />
             <Input
               type="tel"
@@ -118,9 +121,9 @@ export function Step0() {
               error={errors.phone}
               label="Celular"
               {...register('phone')}
-              w={['50%']}
+              w={['100%', '50%']}
             />
-          </HStack>
+          </Stack>
         </Stack>
         <HStack spacing={2} mt={8}>
           <IconButton
@@ -154,7 +157,6 @@ export function Step0() {
         <TabPanelFooter
           hasBackButton={false}
           footerButtonText="Continuar"
-          footerButtonIsDisabled={!isDirty}
           footerButtonIsLoading={isSubmitting || isValidating || isLoading}
         />
       </Flex>

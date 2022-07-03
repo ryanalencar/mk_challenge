@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <Center mt={5}>
+      <Center w={['100%']} mt={5}>
         <Stepper />
       </Center>
     </>

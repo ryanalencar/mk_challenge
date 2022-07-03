@@ -5,7 +5,7 @@ import {
   Button,
   ButtonGroup,
   Divider,
-  HStack,
+  Stack,
   VStack,
 } from '@chakra-ui/react';
 
@@ -33,7 +33,11 @@ export function TabPanelFooter({
     <VStack as="footer" mt={8} spacing={5} align="flex-start">
       <Divider borderRadius={2} />
 
-      <HStack justify="space-between" w="100%">
+      <Stack
+        direction={['column', 'column', 'row']}
+        align="center"
+        justify="space-between"
+        w="100%">
         <ButtonGroup spacing={8}>
           <Button
             isDisabled={footerButtonIsDisabled}
@@ -59,7 +63,7 @@ export function TabPanelFooter({
           )}
         </ButtonGroup>
         <Box> {children}</Box>
-      </HStack>
+      </Stack>
     </VStack>
   );
 }

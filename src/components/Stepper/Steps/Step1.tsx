@@ -8,6 +8,7 @@ import {
   PinInputField,
   Stack,
   Text,
+  useMediaQuery,
   useToast,
 } from '@chakra-ui/react';
 import ReactInputMask from 'react-input-mask';
@@ -23,6 +24,7 @@ export function Step1() {
   const { moveForward } = useTab();
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [isMobile] = useMediaQuery('(max-width: 600px)');
 
   const handleValidatePhone = () => {
     setIsLoading(true);
@@ -50,7 +52,7 @@ export function Step1() {
         </Text>
         <Text size="xsm" variant="regular">
           Enviamos uma mensagem SMS com o código de confirmação
-          <br /> para o celular abaixo:
+          {isMobile ? null : <br />} para o celular abaixo:
         </Text>
         <Input
           isReadOnly
@@ -63,7 +65,7 @@ export function Step1() {
           color="blue.heading"
           fontWeight="700"
           borderRadius={50}
-          w={['25%']}
+          w={['70%', '60%', '45%', '25%']}
         />
       </Stack>
       <Stack>

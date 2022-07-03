@@ -7,6 +7,7 @@ import {
   Spinner,
   Stack,
   Text,
+  useMediaQuery,
   useRadioGroup,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -77,7 +78,7 @@ export function Step2() {
     companyState.companySegment ?? '',
   );
   const [isLoading, setIsLoading] = useState(false);
-
+  const [isMobile] = useMediaQuery('(max-width: 930px)');
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'companySegment',
     onChange: (value) => setCompanySegment(value),
@@ -138,7 +139,7 @@ export function Step2() {
         <Text size="xsm" variant="regular">
           Agora cadastre as informações de sua emprea para criar sua conta
           empresarial
-          <br /> customizada para seu negócio
+          {isMobile ? null : <br />} customizada para seu negócio
         </Text>
         <Text size="xsm" color="blue.heading">
           Escolha o segmento de sua empresa:
@@ -165,7 +166,7 @@ export function Step2() {
             label="Tipo de empresa"
             placeholder="Selecione o tipo de empresa"
             options={companiesType}
-            w={['50%']}
+            w={['100%', '75%', '50%']}
             {...register('companyType')}
           />
           <Input
@@ -175,9 +176,9 @@ export function Step2() {
             error={errors.cnpj}
             label="CNPJ"
             {...register('cnpj')}
-            w={['35%']}
+            w={['100%', '75%', '50%', '25%']}
           />
-          <HStack spacing={5}>
+          <Stack direction={['column', 'column', 'row']} spacing={[2, 3]}>
             <Input
               error={errors.corporateName}
               label="Razão social"
@@ -190,28 +191,29 @@ export function Step2() {
               error={errors.phone}
               label="Telefone"
               {...register('phone')}
-              w={['50%']}
+              w={['100%', '75%', '50%']}
             />
-          </HStack>
+          </Stack>
           <HStack spacing={3}>
             <Input
+              type="tel"
               as={ReactInputMask}
               mask="99999-999"
               error={errors.zipCode}
               label="CEP"
               {...register('zipCode')}
               onChange={(e) => handleZipCodeChange(e.target.value)}
-              w={['15%']}
+              w={['40%', '35%', '25%', '20%']}
             />
-            {isLoading && <Spinner size="sm" />}
+            {isLoading && <Spinner size="md" />}
           </HStack>
           <Input
             error={errors.address}
             label="Endereço"
             {...register('address')}
-            w={['75%']}
+            w={['100%', '75%', '50%']}
           />
-          <HStack spacing={5}>
+          <Stack direction={['column', 'column', 'row']} spacing={[2, 3]}>
             <Input
               error={errors.addressNumber}
               label="Número"
@@ -227,7 +229,7 @@ export function Step2() {
               label="Bairro"
               {...register('district')}
             />
-          </HStack>
+          </Stack>
         </Stack>
 
         <TabPanelFooter
