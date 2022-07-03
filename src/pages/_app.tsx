@@ -6,6 +6,8 @@ import { TabProvider } from '../hooks/useTab';
 import { store } from '../store';
 import { theme } from '../styles/theme';
 
+import '../config/i18n';
+
 export const { ToastContainer, toast: standaloneToast } =
   createStandaloneToast();
 
