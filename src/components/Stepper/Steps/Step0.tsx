@@ -16,6 +16,7 @@ import InputMask from 'react-input-mask';
 import * as yup from 'yup';
 
 import { useTab } from '../../../hooks/useTab';
+import { standaloneToast } from '../../../pages/_app';
 import { useReducerUser } from '../../../store/hooks/user';
 import { Input } from '../../Form';
 import { TabPanelFooter } from '../TabPanel/TabPanelFooter';
@@ -52,7 +53,9 @@ export function Step0() {
     },
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [useContractRead, setUseContractRead] = useBoolean();
+  const [useContractRead, setUseContractRead] = useBoolean(
+    userState.useContractRead ?? false,
+  );
   const { moveForward } = useTab();
 
   const handleStep0Submit: SubmitHandler<Step0Data> = (data) => {
@@ -67,8 +70,21 @@ export function Step0() {
       useContractRead,
     };
     createUser(formData);
-    moveForward();
-    setIsLoading(false);
+
+    if (standaloneToast.isActive('user-created-toast')) return null;
+    standaloneToast({
+      id: 'user-created-toast',
+      title: 'Usuário criado com sucesso!',
+      description: 'Seguindo para a próxima etapa. Obrigado!',
+      status: 'success',
+      duration: 3000,
+      isClosable: true,
+    });
+
+    setTimeout(() => {
+      moveForward();
+      setIsLoading(false);
+    }, 1500);
   };
 
   return (
@@ -106,20 +122,20 @@ export function Step0() {
             />
           </HStack>
         </Stack>
-        <HStack spacing={5} mt={8}>
+        <HStack spacing={2} mt={8}>
           <IconButton
             aria-label="Contrato de uso"
             icon={
               useContractRead ? (
-                <CheckIcon fontSize={20} color="whiteAlpha.900" />
+                <CheckIcon fontSize={15} color="whiteAlpha.900" />
               ) : (
-                <CloseIcon fontSize={15} color="whiteAlpha.900" />
+                <CloseIcon fontSize={12} color="whiteAlpha.900" />
               )
             }
             bgColor={useContractRead ? 'green' : 'red.500'}
             _hover={{ opacity: 0.9 }}
             _active={{ opacity: 0.9 }}
-            size="sm"
+            size="xs"
             onClick={setUseContractRead.toggle}
             borderRadius="full"
           />

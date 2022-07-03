@@ -6,7 +6,8 @@ import { TabProvider } from '../hooks/useTab';
 import { store } from '../store';
 import { theme } from '../styles/theme';
 
-const { ToastContainer } = createStandaloneToast();
+export const { ToastContainer, toast: standaloneToast } =
+  createStandaloneToast();
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (

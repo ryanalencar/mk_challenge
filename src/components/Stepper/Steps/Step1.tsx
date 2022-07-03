@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 import {
   Button,
-  createStandaloneToast,
   Flex,
   HStack,
   PinInput,
@@ -14,11 +13,10 @@ import {
 import ReactInputMask from 'react-input-mask';
 
 import { useTab } from '../../../hooks/useTab';
+import { standaloneToast } from '../../../pages/_app';
 import { useReducerUser } from '../../../store/hooks/user';
 import { Input } from '../../Form';
 import { TabPanelFooter } from '../TabPanel/TabPanelFooter';
-
-const { toast: standaloneToast } = createStandaloneToast();
 
 export function Step1() {
   const [userState, { updateUser }] = useReducerUser();

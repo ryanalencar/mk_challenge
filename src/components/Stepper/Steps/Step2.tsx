@@ -18,6 +18,7 @@ import ReactInputMask from 'react-input-mask';
 import * as yup from 'yup';
 
 import { useTab } from '../../../hooks/useTab';
+import { standaloneToast } from '../../../pages/_app';
 import { getAddressByZipCode } from '../../../services/api';
 import { useReducerCompany } from '../../../store/hooks/company';
 import { Input, Select } from '../../Form';
@@ -72,7 +73,9 @@ export function Step2() {
     defaultValues: companyState,
   });
   const { moveForward } = useTab();
-  const [companySegment, setCompanySegment] = useState<string>('');
+  const [companySegment, setCompanySegment] = useState<string>(
+    companyState.companySegment ?? '',
+  );
   const [isLoading, setIsLoading] = useState(false);
 
   const { getRootProps, getRadioProps } = useRadioGroup({
@@ -95,8 +98,21 @@ export function Step2() {
       companySegment,
     };
     createCompany(formData);
-    moveForward();
-    setIsLoading(false);
+
+    if (standaloneToast.isActive('company-created-toast')) return null;
+    standaloneToast({
+      id: 'company-created-toast',
+      title: 'Empresa criada com sucesso!',
+      description: 'Seguindo para a próxima etapa. Obrigado!',
+      status: 'success',
+      duration: 3000,
+      isClosable: true,
+    });
+
+    setTimeout(() => {
+      moveForward();
+      setIsLoading(false);
+    }, 1500);
   };
 
   const handleZipCodeChange = debounce(async (zipCode: string) => {
